@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """ importing all the needed modules """
 import uuid # unique user id generation
 import bcrypt # to encrypt the password
@@ -17,9 +19,11 @@ class User:
 
     @staticmethod
     def encrypt_password(password):
-        """ Generates the password in a secured manner """
-        salt = bcrypt.gensalt() #generates salt for hashing
-        password_bytes = password.encode('utf-8') # convert password to bytes
+        """ Generates the password in a secured manner
+            using salt() and convert to bytes using encode()
+        """
+        salt = bcrypt.gensalt() 
+        password_bytes = password.encode('utf-8') 
         hashed_password = bcrypt.hashpw(password_bytes, salt)
         return hashed_password.decode('utf-8')
 
