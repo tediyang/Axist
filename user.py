@@ -9,13 +9,20 @@ class User:
     """
     # class variables
     username = ""
-    user_id = ""
+    id = ""
     password = ""
+    
+
     def __init__(self, username, user_id, password):
         """ initilization """
         self.username = username
-        self.user_id = self.generate_user_id()
+        self.id = self.generate_id()
         self.password = self.encrypt_password(password)
+
+    @staticmethod
+    def generate_id():
+        "Generate unique id"
+        return str(uuid.uuid(4))
 
     @staticmethod
     def encrypt_password(password):
@@ -29,4 +36,4 @@ class User:
 
     def check_password(self, password):
         password_bytes = password.encode('utf-8')
-        return bcrypt.checkpw(password_bytes, hasted_password)
+        return bcrypt.checkpw(password_bytes, hashed_password)
