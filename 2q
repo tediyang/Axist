@@ -3,8 +3,6 @@
 """ importing all the needed modules """
 import uuid # unique user id generation
 import bcrypt # to encrypt the password
-
-
 class User:
     """
         Attributes and methods of the class are defined here
@@ -15,16 +13,16 @@ class User:
     password = ""
     
 
-    def __init__(self, username, password):
+    def __init__(self, username):
         """ initilization """
         self.username = username
-        self.ID = self.generate_ID()
+        self.ID = str(uuid.uuid(4))
         
 
-    @staticmethod
-    def generate_ID():
-        """Generate unique id"""
-        return str(uuid.uuid(4))
+    #@staticmethod
+    #def generate_ID():
+    #   "Generate unique id"
+    #    return str(uuid.uuid(4))
 
     @staticmethod
     def encrypt_password(password):
@@ -52,7 +50,7 @@ class User:
     def set_password(self, password):
         self.password = self.encrypt_password(password)
 
-user = User("mawoda2")
+user = User("mawoda1")
 password = input("Enter password: ")
 user.set_password(password)
 print(user.id)
