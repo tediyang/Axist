@@ -4,4 +4,4 @@ Axist is a portfolio project my team came up with at ALX Software Engineering pr
 ### COLABORATORS
 * Eyang, Daniel Eyoh [Github](https://github.com/Tediyang), Email:<daniel.eyang.ed@gmail.com>
 * Mawoda [Github](https://github.com/mdekabs), Email:<1mawoda@gmail.com>
-* oLOLLLLoshua [Github](https://github.com/JoshuaOloton), Email:<olotonjoshua@gmail.com>
+* Olotun Joshua [Github](https://github.com/JoshuaOloton), Email:<olotonjoshua@gmail.com>
