@@ -1,2 +1,2 @@
 # AXIST
-This branch is where production codes are created, debugged and fixed before merging with the master branch. 
+This branch is where files are created, debugged and errors are fixed before merging with the master branch. 
