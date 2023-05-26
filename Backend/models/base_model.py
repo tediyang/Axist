@@ -30,6 +30,8 @@ class BaseModel:
 
   # Class attributes which other models will inherit.
   id = Column(String(60), primary_key=True)
+
+  # Generate default values in the database.
   created_at = Column(DateTime, default=datetime.utcnow)
   updated_at = Column(DateTime, default=datetime.utcnow)
   
@@ -39,7 +41,7 @@ class BaseModel:
 
   def __str__(self):
     """ string representation of the Object class """
-    return f"[{self.__class__.__name__}] ({self.id}) {self.dict}"
+    return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
   def save(self):
     """ updates the attribute 'updated_at' with the current datetime """

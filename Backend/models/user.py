@@ -12,7 +12,7 @@ from hashlib import md5
 class User(BaseModel, Base):
 	"""Representation of a user data. """
 	__tablename__ = 'users'
-	username = Column(String(64, unique=True, nullable=False))
+	username = Column(String(64), unique=True, nullable=False)
 	password = Column(String(64), nullable=False)
 	email = Column(String(64), nullable=False)
 	first_name = Column(String(64), nullable=True)
