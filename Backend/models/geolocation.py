@@ -11,7 +11,7 @@ from sqlalchemy import Column, String, ForeignKey
 class Location(BaseModel, Base):
 	""" Representation of a location data. """
 	__tablename__ = 'locations'
-	latitude = Column(String(64), unique=True, nullable=False)
+	latitude = Column(String(64), nullable=False)
 	longitude = Column(String(64), nullable=False)
 	loc_name = Column(String(64), nullable=False)
 	user_id = Column(String(64), ForeignKey('users.id'), nullable=False)
