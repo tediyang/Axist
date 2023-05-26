@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-    This model inherits from the BaseModel and contains data
-    of the user.
+    This model inherits from the BaseModel and
+    contains the user data.
 """
 
 from models.base_model import BaseModel, Base
@@ -10,7 +10,7 @@ from hashlib import md5
 
 
 class User(BaseModel, Base):
-	"""Representation of a user data. """
+	""" Representation of a user data. """
 	__tablename__ = 'users'
 	username = Column(String(64), unique=True, nullable=False)
 	password = Column(String(64), nullable=False)
