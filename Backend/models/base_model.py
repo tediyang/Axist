@@ -22,27 +22,28 @@ from sqlalchemy.ext.declarative import declarative_base
 import uuid
 
 
-Base = declarative_base() # 
+Base = declarative_base()
+
 
 class BaseModel:
   """ All other models will inherit from this BaseModel."""
 
-  """ class attributes which other models will inherit. """
+  # Class attributes which other models will inherit.
   id = Column(String(60), primary_key=True)
   created_at = Column(DateTime, default=datetime.utcnow)
   updated_at = Column(DateTime, default=datetime.utcnow)
   
-  def __init__(self, *args, **kwargs):
+  def __init__(self):
     """ initialization of the id instance """
     self.id = str(uuid.uuid4())
 
   def __str__(self):
-    """ string representation of BaseModel class """
+    """ string representation of the Object class """
     return f"[{self.__class__.__name__}] ({self.id}) {self.dict}"
 
   def save(self):
     """ updates the attribute 'updated_at' with the current datetime """
-    self.updated_at = datetime.now()
+    self.updated_at = datetime.utcnow()
 
   def delete(self):
     """ deletes the current object saved in storage """
