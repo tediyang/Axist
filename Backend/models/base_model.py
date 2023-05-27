@@ -17,36 +17,55 @@
 """
 
 from datetime import datetime
+from models import storage
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
 
 
+time = "%Y-%m-%dT%H:%M:%S.%f"
 Base = declarative_base()
 
 
 class BaseModel:
-  """ All other models will inherit from this BaseModel."""
+    """ All other models will inherit from this BaseModel. """
 
-  # Class attributes which other models will inherit.
-  id = Column(String(60), primary_key=True)
+    # Class attributes which other models will inherit.
+    id = Column(String(60), primary_key=True)
 
-  # Generate default values in the database.
-  created_at = Column(DateTime, default=datetime.utcnow)
-  updated_at = Column(DateTime, default=datetime.utcnow)
+    # Generate default values in the database.
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
   
-  def __init__(self):
-    """ initialization of the id instance """
-    self.id = str(uuid.uuid4())
+    def __init__(self):
+        """ initialization of the id instance """
+        self.id = str(uuid.uuid4())
 
-  def __str__(self):
-    """ string representation of the Object class """
-    return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+    def __str__(self):
+        """ string representation of the Object class """
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
-  def save(self):
-    """ updates the attribute 'updated_at' with the current datetime """
-    self.updated_at = datetime.utcnow()
+    def save(self):
+        """ updates the attribute 'updated_at' with the current datetime """
+        self.updated_at = datetime.utcnow()
+        storage.new(self)
+        storage.save()
 
-  def delete(self):
-    """ deletes the current object saved in storage """
-    pass
+    def to_dict(self):
+        """returns a dictionary containing all keys/values of the instance"""
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
+            new_dict["__class__"] = self.__class__.__name__
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        if "password" in new_dict:
+            del new_dict["password"]
+
+        return new_dict
+
+    def delete(self):
+        """ deletes the current object saved in storage """
+        storage.delete(self)
