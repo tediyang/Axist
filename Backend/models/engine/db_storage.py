@@ -38,13 +38,13 @@ class DBStorage:
         AXIST_MYSQL_DB = ""
         AXIST_ENV = "db"
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(AXIST_MYSQL_USER,
-                                             AXIST_MYSQL_PWD,
-                                             AXIST_MYSQL_HOST,
-                                             AXIST_MYSQL_DB))
+                format(AXIST_MYSQL_USER,
+                    AXIST_MYSQL_PWD,
+                    AXIST_MYSQL_HOST,
+                    AXIST_MYSQL_DB))
 
-        if AXIST_ENV == "test":
-            Base.metadata.drop_all(self.__engine)
+                #if AXIST_ENV == "test":
+                #    Base.metadata.drop_all(self.__engine)
 
     def all(self, cls):
         """
