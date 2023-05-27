@@ -87,7 +87,8 @@ class DBStorage:
         all_cls = storage.all(cls)
 
         if cls == classes["User"]:
-            user_data = map(lambda x: x.id == id, all_cls.values())
+            # Using filter and lambda func to get user_data.
+            user_data = filter(lambda x: x.id == id, all_cls.values())
             if user_data[0]:
                 for key, value in dic.items():
                     setattr(user_data[0], key, value)
