@@ -14,12 +14,13 @@
       - close: remove the session.
 """
 
-from models.base_model import BaseModel, Base
+from models.base_model import Base
 from models import storage
 from models.geolocation import Location
 from models.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 classes = {"User": User, "Location": Location}
 
