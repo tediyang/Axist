@@ -39,29 +39,29 @@ class DBStorage:
         AXIST_ENV = "db"
 
         self.__engine = create_engine('mysql+mysqlconnector://{}:{}@{}/{}'.
-                format(AXIST_MYSQL_USER,
-                    AXIST_MYSQL_PWD,
-                    AXIST_MYSQL_HOST,
-                    AXIST_MYSQL_DB))
+                                      format(AXIST_MYSQL_USER,
+                                             AXIST_MYSQL_PWD,
+                                             AXIST_MYSQL_HOST,
+                                             AXIST_MYSQL_DB))
 
-                #if AXIST_ENV == "test":
-                #    Base.metadata.drop_all(self.__engine)
+        if AXIST_ENV == "test":
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls):
         """
             query on the current database session and return all
             data based on the provided cls.
         """
-        #initialize the dict
+        # initialize the dict
         new_dict = {}
-        #iterate of the items in classes and check for conditions
+        # iterate of the items in classes and check for conditions
         for clss in classes:
             if cls == classes[clss] or cls == clss:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
                     key = f"{obj.__class__.__name__}.{obj.id}"
                     new_dict[key] = obj
-        return (new_dict)        
+        return (new_dict)
 
     def new(self, obj):
         """add the object to the current database session"""
@@ -73,9 +73,9 @@ class DBStorage:
 
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
-        if obj != None:
+        if obj is not None:
             self.__session.delete(obj)
-            self.__session.commit()
+            # self.__session.commit()
 
     def update(self, cls, id, dic):
         """
@@ -83,7 +83,7 @@ class DBStorage:
 
             cls: Object
             id: unique id of Object (string)
-            dic: data of key-value pairs to be updated 
+            dic: data of key-value pairs to be updated
         """
         if cls not in classes.values():
             return None
@@ -97,7 +97,7 @@ class DBStorage:
                 for key, value in dic.items():
                     setattr(user_data[0], key, value)
 
-        models.storage.save()
+        cls.save()
 
     def reload(self):
         """reloads data from the database"""
@@ -105,7 +105,6 @@ class DBStorage:
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
         self.__session = Session
-
 
     def close(self):
         """call remove() method on the private session attribute"""
