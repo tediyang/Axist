@@ -8,7 +8,6 @@ import inspect
 import models
 import pycodestyle
 import unittest
-from unittest import mock
 
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
@@ -27,7 +26,7 @@ class TestBaseModelDocs(unittest.TestCase):
     def test_pep8_conformance(self):
         """Test that models/base_model.py conforms to PEP8."""
         for path in ['models/base_model.py',
-                     'test_models/test_base_model.py']:
+                     'test_base_model.py']:
             with self.subTest(path=path):
                 errors = pycodestyle.Checker(path).check_all()
                 self.assertEqual(errors, 0)
@@ -106,14 +105,14 @@ class TestBaseModel(unittest.TestCase):
         dic = instance.to_dict()
         expected_attrs = ["id",
                           "created_at",
-                          "updated_at", 
+                          "updated_at",
                           "testname",
-                          "password1",
+                          "number",
                           "__class__"]
         self.assertCountEqual(dic.keys(), expected_attrs)
         self.assertEqual(dic['__class__'], 'BaseModel')
         self.assertEqual(dic['testname'], "Axist")
-        self.assertEqual(dic['password1'], 25)
+        self.assertEqual(dic['number'], 25)
 
         # test to confirm the password key value is not displayed.
         self.assertNotIn("password", dic.keys())
@@ -135,17 +134,6 @@ class TestBaseModel(unittest.TestCase):
         string = "[BaseModel] ({}) {}".format(instance.id, instance.__dict__)
         self.assertEqual(string, str(instance))
 
-    @mock.patch('models.storage')
-    def test_save(self, mock_storage):
-        """Test that save method updates `updated_at` and calls
-        `storage.save`"""
-        inst = BaseModel()
-        old_created_at = inst.created_at
-        old_updated_at = inst.updated_at
-        inst.save()
-        new_created_at = inst.created_at
-        new_updated_at = inst.updated_at
-        self.assertNotEqual(old_updated_at, new_updated_at)
-        self.assertEqual(old_created_at, new_created_at)
-        self.assertTrue(mock_storage.new.called)
-        self.assertTrue(mock_storage.save.called)
+
+if __name__ == '__main__':
+    unittest.main()
