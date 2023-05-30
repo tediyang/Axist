@@ -4,10 +4,10 @@
     contains the user data.
 """
 
-from base_model import BaseModel, Base
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from hashlib import md5
-import secrets
+# import secrets
 
 class User(BaseModel, Base):
     """ Representation of a user data. """

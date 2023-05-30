@@ -15,7 +15,7 @@
 """
 
 from models.base_model import Base
-from models import storage
+import models
 from models.geolocation import Location
 from models.user import User
 from sqlalchemy import create_engine
@@ -32,12 +32,13 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        AXIST_MYSQL_USER = "axist_user"
-        AXIST_MYSQL_PWD = "Axistuser123#"
+        AXIST_MYSQL_USER = "root"
+        AXIST_MYSQL_PWD = ""
         AXIST_MYSQL_HOST = "localhost"
         AXIST_MYSQL_DB = "axist"
         AXIST_ENV = "db"
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+
+        self.__engine = create_engine('mysql+mysqlconnector://{}:{}@{}/{}'.
                 format(AXIST_MYSQL_USER,
                     AXIST_MYSQL_PWD,
                     AXIST_MYSQL_HOST,
@@ -84,7 +85,7 @@ class DBStorage:
         if cls not in classes.values():
             return None
 
-        all_cls = storage.all(cls)
+        all_cls = models.storage.all(cls)
 
         if cls == classes["User"]:
             # Using filter and lambda func to get user_data.
@@ -93,7 +94,7 @@ class DBStorage:
                 for key, value in dic.items():
                     setattr(user_data[0], key, value)
 
-        storage.save()
+        models.storage.save()
 
     def reload(self):
         """reloads data from the database"""
