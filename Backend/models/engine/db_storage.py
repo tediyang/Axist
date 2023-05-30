@@ -32,10 +32,10 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        AXIST_MYSQL_USER = ""
-        AXIST_MYSQL_PWD = ""
-        AXIST_MYSQL_HOST = ""
-        AXIST_MYSQL_DB = ""
+        AXIST_MYSQL_USER = "axist_user"
+        AXIST_MYSQL_PWD = "Axistuser123#"
+        AXIST_MYSQL_HOST = "localhost"
+        AXIST_MYSQL_DB = "axist"
         AXIST_ENV = "db"
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
                 format(AXIST_MYSQL_USER,
