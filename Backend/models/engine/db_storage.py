@@ -52,12 +52,14 @@ class DBStorage:
             query on the current database session and return all
             data based on the provided cls.
         """
+        #initialize the dict
         new_dict = {}
+        #iterate of the items in classes and check for conditions
         for clss in classes:
-            if cls is classes[clss] or cls is clss:
+            if cls == classes[clss] or cls == clss:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
-                    key = obj.__class__.__name__ + '.' + obj.id
+                    key = f"{obj.__class__.__name__}.{obj.id}"
                     new_dict[key] = obj
         return (new_dict)        
 
@@ -71,8 +73,9 @@ class DBStorage:
 
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
-        if obj is not None:
+        if obj != None:
             self.__session.delete(obj)
+            self.__session.commit()
 
     def update(self, cls, id, dic):
         """
