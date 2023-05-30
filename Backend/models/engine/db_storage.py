@@ -32,8 +32,8 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        AXIST_MYSQL_USER = "root"
-        AXIST_MYSQL_PWD = ""
+        AXIST_MYSQL_USER = "axist_user"
+        AXIST_MYSQL_PWD = "Axistuser123#"
         AXIST_MYSQL_HOST = "localhost"
         AXIST_MYSQL_DB = "axist"
         AXIST_ENV = "db"
