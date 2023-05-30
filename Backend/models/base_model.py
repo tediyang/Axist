@@ -17,7 +17,7 @@
 """
 
 from datetime import datetime
-from models import storage
+import models
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
 import uuid
@@ -48,8 +48,8 @@ class BaseModel:
     def save(self):
         """ updates the attribute 'updated_at' with the current datetime """
         self.updated_at = datetime.utcnow()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all keys/values of the instance"""
@@ -68,4 +68,4 @@ class BaseModel:
 
     def delete(self):
         """ deletes the current object saved in storage """
-        storage.delete(self)
+        models.storage.delete(self)
