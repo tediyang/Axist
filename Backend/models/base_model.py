@@ -3,8 +3,8 @@
 
     Description:
     1. This model consists of three class attributes which are:
-      - id: A unique primary key for each object generated. 
-      - created_at: datetime of object created
+      - id: A unique primary key for each object generated.
+      - created_at: datetime of object created.
       - updated_at: datetime when data is updated.
 
     2. It will provide only one public instance attribute 'id',
@@ -36,7 +36,7 @@ class BaseModel:
     # Generate default values in the database.
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
-  
+
     def __init__(self):
         """ initialization of the id instance """
         self.id = str(uuid.uuid4())
