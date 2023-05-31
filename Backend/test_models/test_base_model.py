@@ -4,10 +4,12 @@
     and documentation.
 """
 from datetime import datetime
+import time
 import inspect
 import models
 import pycodestyle
 import unittest
+from unittest import mock
 
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
@@ -61,9 +63,9 @@ class TestBaseModelDocs(unittest.TestCase):
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test the BaseModel class"""
+    """ Test the BaseModel class """
     def test_instantiation(self):
-        """Test that object is correctly created"""
+        """ Test that object is correctly created """
         instance = BaseModel()
         self.assertIs(type(instance), BaseModel)
         instance.testname = "Axist"
@@ -83,7 +85,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(instance.password, "Axist123#")
 
     def test_uuid(self):
-        """Test that id is a valid uuid and unique among different models."""
+        """ Test that id is a valid uuid and unique among different models. """
         inst1 = BaseModel()
         inst2 = BaseModel()
         for inst in [inst1, inst2]:
@@ -97,7 +99,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(inst1.id, inst2.id)
 
     def test_to_dict(self):
-        """Test conversion of object attributes to dictionary"""
+        """ Test conversion of object attributes to dictionary. """
         instance = BaseModel()
         instance.testname = "Axist"
         instance.number = 25
@@ -114,7 +116,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(dic['number'], 25)
 
     def test_to_dict_values(self):
-        """test that values in dict returned from to_dict are correct"""
+        """ Test that values in dict returned from to_dict are correct. """
         t_format = "%Y-%m-%dT%H:%M:%S.%f"
         bm = BaseModel()
         new_d = bm.to_dict()
@@ -125,10 +127,28 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(new_d["updated_at"], bm.updated_at.strftime(t_format))
 
     def test_str(self):
-        """test that the str method has the correct output"""
+        """ Test that the str method has the correct output. """
         instance = BaseModel()
         string = "[BaseModel] ({}) {}".format(instance.id, instance.__dict__)
         self.assertEqual(string, str(instance))
+
+    @mock.patch('models.storage')
+    def test_save(self, mock_storage):
+        """
+            Test to show updated_at changed after storage.save
+            function is called.
+        """
+        inst = BaseModel()
+        old_created_at = inst.created_at
+        old_updated_at = inst.updated_at
+        time.sleep(0.0001)
+        inst.save()
+        new_created_at = inst.created_at
+        new_updated_at = inst.updated_at
+        self.assertNotEqual(old_updated_at, new_updated_at)
+        self.assertEqual(old_created_at, new_created_at)
+        self.assertTrue(mock_storage.new.called)
+        self.assertTrue(mock_storage.save.called)
 
 
 if __name__ == '__main__':
