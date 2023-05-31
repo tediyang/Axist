@@ -4,9 +4,7 @@
     and documentation.
 """
 
-from datetime import datetime
 import inspect
-import models
 from models import user
 from models.base_model import BaseModel
 import pycodestyle
@@ -48,7 +46,7 @@ class TestUserDocs(unittest.TestCase):
                         "user.py needs a docstring")
 
     def test_user_class_docstring(self):
-        """Test for the City class docstring"""
+        """Test for the User class docstring"""
         self.assertIsNot(User.__doc__, None,
                          "User class needs a docstring")
         self.assertTrue(len(User.__doc__) >= 1,
@@ -95,6 +93,7 @@ class TestUser(unittest.TestCase):
         user.password = "Axistuser123#"
         self.assertTrue(hasattr(user, "password"))
         self.assertNotEqual(user.password, "Axistuser123#")
+
         # Hashlib md5 is represented as 32 hexadecimal digits
         self.assertEqual(len(user.password), 32)
 
@@ -113,14 +112,16 @@ class TestUser(unittest.TestCase):
     def test_to_dict_creates_dict(self):
         """Test to_dict method creates a dictionary with proper attrs"""
         u = User()
+        u.password = "Chichi"
         new_d = u.to_dict()
         self.assertEqual(type(new_d), dict)
         self.assertFalse("_sa_instance_state" in new_d)
         for attr in u.__dict__:
-            if attr != "_sa_instance_state":
-                self.assertTrue(attr in new_d)
             if attr == "password":  # confirm password is not displayed.
                 self.assertFalse(attr in new_d)
+                break
+            if attr != "_sa_instance_state":
+                self.assertTrue(attr in new_d)
         self.assertTrue("__class__" in new_d)
 
     def test_to_dict_values(self):
