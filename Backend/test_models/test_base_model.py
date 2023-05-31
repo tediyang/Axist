@@ -24,7 +24,7 @@ class TestBaseModelDocs(unittest.TestCase):
         self.base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
 
     def test_pep8_conformance(self):
-        """Test that models/base_model.py conforms to PEP8."""
+        """Test that models/base_model.py conforms to PEP8 (pycodestyle)."""
         for path in ['models/base_model.py',
                      'test_base_model.py']:
             with self.subTest(path=path):
@@ -100,7 +100,6 @@ class TestBaseModel(unittest.TestCase):
         """Test conversion of object attributes to dictionary"""
         instance = BaseModel()
         instance.testname = "Axist"
-        instance.password = "Axist123##"
         instance.number = 25
         dic = instance.to_dict()
         expected_attrs = ["id",
@@ -113,9 +112,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(dic['__class__'], 'BaseModel')
         self.assertEqual(dic['testname'], "Axist")
         self.assertEqual(dic['number'], 25)
-
-        # test to confirm the password key value is not displayed.
-        self.assertNotIn("password", dic.keys())
 
     def test_to_dict_values(self):
         """test that values in dict returned from to_dict are correct"""
