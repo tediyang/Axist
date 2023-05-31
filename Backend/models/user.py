@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!usr/bin/python3
 """
     This model inherits from the BaseModel and
     contains the user data.
