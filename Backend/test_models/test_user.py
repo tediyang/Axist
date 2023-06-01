@@ -32,20 +32,6 @@ class TestUserDocs(unittest.TestCase):
                 errors = pycodestyle.Checker(path).check_all()
                 self.assertEqual(errors, 0)
 
-    # def test_pep8_conformance_user(self):
-    #     """Test that models/user.py conforms to PEP8(pycodestyle)."""
-    #     pep8s = pycodestyle.StyleGuide(quiet=True)
-    #     result = pep8s.check_files(['models/user.py'])
-    #     self.assertEqual(result.total_errors, 0,
-    #                      "Found code style errors (and warnings).")
-
-    # def test_pep8_conformance_test_user(self):
-    #     """Test that test_models/test_user.py conforms to PEP8(pycodestyle)."""
-    #     pep8s = pycodestyle.StyleGuide(quiet=True)
-    #     result = pep8s.check_files(['test_user.py'])
-    #     self.assertEqual(result.total_errors, 0,
-    #                      "Found code style errors (and warnings).")
-
     def test_user_module_docstring(self):
         """Test for the user.py module docstring"""
         self.assertIsNot(user.__doc__, None,
