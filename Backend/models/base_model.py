@@ -50,8 +50,6 @@ class BaseModel:
     def save(self):
         """ updates the attribute 'updated_at' with the current datetime """
         self.updated_at = datetime.utcnow()
-        models.storage.new(self)
-        models.storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all keys/values of the instance"""
@@ -68,7 +66,3 @@ class BaseModel:
             del new_dict["password"]
 
         return new_dict
-
-    def delete(self):
-        """ deletes the current object saved in storage """
-        models.storage.delete(self)
