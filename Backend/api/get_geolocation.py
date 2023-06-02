@@ -1,20 +1,38 @@
 #!/usr/bin/python3
-
-from flask import request, jsonify
+""" Importing necessary modules """
+import geocoder
 import requests
 
-def geo_geolocation():
-    """ a get request to get the longitude and lat of a user's address """
-    url = f"https://geo.ipify.org/api/v2/country?apiKey=YOUR_API_KEY&ipAddress={ip_address}"
+def allow_access_to_location(api_key):
+    """ This will ask users to grant access to device location """
+    # Make a request to the Google Maps Geocoding API
+    url = f'https://maps.googleapis.com/maps/api/geocode/json?latlng=current_location&key={api_key}'
     response = requests.get(url)
+    data = response.json()
 
-        #check if response is ok and return a json file
-    if response.ok:
-        data = response.json()
-        #get the lat and long from the file
-        longitude = data.get('location', {}).get("lng")
-        latitide = data.get('location', {}).get("lat")
-        return longitude, latitude
+    # Parse the JSON response and extract the location information
+    if data['status'] == 'OK':
+        results = data['results']
+        if results:
+            location = results[0]['formatted_address']
+            return location
+    return "Unknown"
 
+def main():
+    # API key for Google Maps Geocoding API
+    api_key = 'api_key'
+
+    # Allow access to location
+    user_input = input("Allow app to access your location? (yes/no): ").lower()
+    if user_input == "yes":
+        current_location = allow_access_to_location(api_key)
+        if current_location:
+            print("Location:", current_location)
+        else:
+            print("Failed to retrieve the current location.")
     else:
-        return None, None
+        print("Location access denied.")
+
+if __name__ == "__main__":
+    main()
+
