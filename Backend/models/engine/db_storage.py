@@ -15,7 +15,6 @@
 """
 
 from models.base_model import Base
-import models
 from models.geolocation import Location
 from models.user import User
 from sqlalchemy import create_engine
@@ -37,6 +36,8 @@ class DBStorage:
         AXIST_MYSQL_HOST = "localhost"
         AXIST_MYSQL_DB = "axist"
         AXIST_ENV = "db"
+        if AXIST_ENV == "test":
+            AXIST_MYSQL_DB = "axist_test"
 
         self.__engine = create_engine('mysql+mysqlconnector://{}:{}@{}/{}'.
                                       format(AXIST_MYSQL_USER,
@@ -75,7 +76,7 @@ class DBStorage:
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
-            # self.__session.commit()
+            self.__session.commit()
 
     def update(self, cls, id, dic):
         """
@@ -88,16 +89,23 @@ class DBStorage:
         if cls not in classes.values():
             return None
 
-        all_cls = models.storage.all(cls)
+        obj = self.get(cls, id)
 
-        if cls == classes["User"]:
-            # Using filter and lambda func to get user_data.
-            user_data = filter(lambda x: x.id == id, all_cls.values())
-            if user_data[0]:
-                for key, value in dic.items():
-                    setattr(user_data[0], key, value)
+        if obj:
+            for key, value in dic.items():
+                setattr(obj, key, value)
+            obj.save()
+            self.save()
 
-        cls.save()
+    def get(self, cls, id):
+        """A method to retrieve one object"""
+        if cls and id:
+            data = self.all(cls)
+            search = "{}.{}".format(cls.__name__, id)
+            if search in data.keys():
+                return data[search]
+
+        return None
 
     def reload(self):
         """reloads data from the database"""
