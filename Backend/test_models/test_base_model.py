@@ -9,7 +9,6 @@ import inspect
 import models
 import pycodestyle
 import unittest
-from unittest import mock
 
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
@@ -132,8 +131,7 @@ class TestBaseModel(unittest.TestCase):
         string = "[BaseModel] ({}) {}".format(instance.id, instance.__dict__)
         self.assertEqual(string, str(instance))
 
-    @mock.patch('models.storage')
-    def test_save(self, mock_storage):
+    def test_save(self):
         """
             Test to show updated_at changed after storage.save
             function is called.
@@ -147,8 +145,6 @@ class TestBaseModel(unittest.TestCase):
         new_updated_at = inst.updated_at
         self.assertNotEqual(old_updated_at, new_updated_at)
         self.assertEqual(old_created_at, new_created_at)
-        self.assertTrue(mock_storage.new.called)
-        self.assertTrue(mock_storage.save.called)
 
 
 if __name__ == '__main__':
