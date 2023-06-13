@@ -16,7 +16,8 @@ def allow_access_to_location(api_key):
         if results:
             location = results[0]['formatted_address']
             return location
-    return "Unknown"
+        else:
+            return uknown
 
 def main():
     # API key for Google Maps Geocoding API
