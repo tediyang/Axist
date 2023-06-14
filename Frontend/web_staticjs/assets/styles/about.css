@@ -1,0 +1,29 @@
+body,
+::after,
+::before {
+  box-sizing: border-box !important;
+  padding: 0px !important;
+  margin: 0px !important;
+  background-color: whitesmoke;
+}
+
+.container section {
+    font-family: 'Roboto,Arial,Helvetica,sans-serif';
+    text-align: center;
+    position: relative;
+    top: 100px;
+    margin: -30px 0px;
+    padding: 0px;
+}
+
+.container article {
+    padding-bottom: 10px;
+}
+
+.container h2 {
+    color: rgb(8, 85, 8);
+}
+
+footer {
+    top: 36rem !important;
+}
