@@ -7,12 +7,13 @@
       - created_at: datetime of object created.
       - updated_at: datetime when data is updated.
 
-    2. It will provide only one public instance attribute 'id',
-    where the unique id will be defined with uuid4.
+    2. It will provide three public instance attributes,
+    where the unique id will be defined with uuid4, created at
+    and updated at will be defined using datetime library.
 
     3. It will provide the following public instance methods:
+      - __str__: return a string representation of the object attributes.
       - save: save any object generated to the storage.
-      - delete: delete object from the storage.
       - to_dict: generate a dictionary format of the object attributes.
 """
 
