@@ -17,9 +17,12 @@
 from models.base_model import Base
 from models.geolocation import Location
 from models.user import User
+from os import getenv
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+load_dotenv('axist.env')
 
 classes = {"User": User, "Location": Location}
 
@@ -31,21 +34,15 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        AXIST_MYSQL_USER = "axist_user"
-        AXIST_MYSQL_PWD = "Axistuser123#"
-        AXIST_MYSQL_HOST = "localhost"
-        AXIST_MYSQL_DB = "axist"
-        AXIST_ENV = "db"
-        if AXIST_ENV == "test":
-            AXIST_MYSQL_DB = "axist_test"
+        user = getenv('AXIST_MYSQL_USER')
+        pwd = getenv('AXIST_MYSQL_PWD')
+        host = getenv('AXIST_MYSQL_HOST')
+        db = getenv('AXIST_MYSQL_DB')
 
         self.__engine = create_engine('mysql+mysqlconnector://{}:{}@{}/{}'.
-                                      format(AXIST_MYSQL_USER,
-                                             AXIST_MYSQL_PWD,
-                                             AXIST_MYSQL_HOST,
-                                             AXIST_MYSQL_DB))
+                                      format(user, pwd, host, db))
 
-        if AXIST_ENV == "test":
+        if getenv('AXIST_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls):
