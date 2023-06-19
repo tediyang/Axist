@@ -22,7 +22,7 @@ onMounted(() => {
         </h1>
         <h2 v-bind:style="{ color: 'red' }">EASIER</h2>
         <h2 v-bind:style="{ color: 'yellow' }">QUICKER</h2>
-        <h2 v-bind:style="{ color: 'green' }">FASTER</h2>
+        <h2 v-bind:style="{ color: 'green' }">SAFER</h2>
       </div>
       <div class="nav">
         <!-- <RouterLink to="/">Home</RouterLink> -->
