@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """
+    Importing neccessary modules
     Test module for BaseModel, checking for expected behavior
     and documentation.
 """
@@ -27,7 +28,7 @@ class TestBaseModelDocs(unittest.TestCase):
     def test_pep8_conformance(self):
         """Test that models/base_model.py conforms to PEP8 (pycodestyle)."""
         for path in ['models/base_model.py',
-                     'test_base_model.py']:
+                'test_base_model.py']:
             with self.subTest(path=path):
                 errors = pycodestyle.Checker(path).check_all()
                 self.assertEqual(errors, 0)
@@ -35,34 +36,34 @@ class TestBaseModelDocs(unittest.TestCase):
     def test_module_docstring(self):
         """Test for the existence of module docstring"""
         self.assertIsNot(module_doc, None,
-                         "base_model.py needs a docstring")
+                "base_model.py needs a docstring")
         self.assertTrue(len(module_doc) > 1,
-                        "base_model.py needs a docstring")
+                "base_model.py needs a docstring")
 
-    def test_class_docstring(self):
-        """Test for the BaseModel class docstring"""
+        def test_class_docstring(self):
+            """Test for the BaseModel class docstring"""
         self.assertIsNot(BaseModel.__doc__, None,
-                         "BaseModel class needs a docstring")
+                "BaseModel class needs a docstring")
         self.assertTrue(len(BaseModel.__doc__) >= 1,
-                        "BaseModel class needs a docstring")
+                "BaseModel class needs a docstring")
 
-    def test_func_docstrings(self):
-        """Test for the presence of docstrings in BaseModel methods"""
+        def test_func_docstrings(self):
+            """Test for the presence of docstrings in BaseModel methods"""
         for func in self.base_funcs:
             with self.subTest(function=func):
                 self.assertIsNot(
-                    func[1].__doc__,
-                    None,
-                    "{:s} method needs a docstring".format(func[0])
-                )
+                        func[1].__doc__,
+                        None,
+                        "{:s} method needs a docstring".format(func[0])
+                        )
                 self.assertTrue(
-                    len(func[1].__doc__) > 1,
-                    "{:s} method needs a docstring".format(func[0])
-                )
+                        len(func[1].__doc__) > 1,
+                        "{:s} method needs a docstring".format(func[0])
+                        )
 
 
-class TestBaseModel(unittest.TestCase):
-    """ Test the BaseModel class """
+                class TestBaseModel(unittest.TestCase):
+                    """ Test the BaseModel class """
     def test_instantiation(self):
         """ Test that object is correctly created """
         instance = BaseModel()
@@ -70,12 +71,12 @@ class TestBaseModel(unittest.TestCase):
         instance.testname = "Axist"
         instance.password = "Axist123#"
         attrs_types = {
-            "id": str,
-            "created_at": datetime,
-            "updated_at": datetime,
-            "testname": str,
-            "password": str
-        }
+                "id": str,
+                "created_at": datetime,
+                "updated_at": datetime,
+                "testname": str,
+                "password": str
+                }
         for attr, typ in attrs_types.items():
             with self.subTest(attr=attr, typ=typ):
                 self.assertIn(attr, instance.__dict__)
@@ -92,10 +93,10 @@ class TestBaseModel(unittest.TestCase):
             with self.subTest(uuid=uuid):
                 self.assertIs(type(uuid), str)
                 self.assertRegex(uuid,
-                                 '^[0-9a-f]{8}-[0-9a-f]{4}'
-                                 '-[0-9a-f]{4}-[0-9a-f]{4}'
-                                 '-[0-9a-f]{12}$')
-        self.assertNotEqual(inst1.id, inst2.id)
+                        '^[0-9a-f]{8}-[0-9a-f]{4}'
+                        '-[0-9a-f]{4}-[0-9a-f]{4}'
+                        '-[0-9a-f]{12}$')
+                self.assertNotEqual(inst1.id, inst2.id)
 
     def test_to_dict(self):
         """ Test conversion of object attributes to dictionary. """
@@ -104,11 +105,11 @@ class TestBaseModel(unittest.TestCase):
         instance.number = 25
         dic = instance.to_dict()
         expected_attrs = ["id",
-                          "created_at",
-                          "updated_at",
-                          "testname",
-                          "number",
-                          "__class__"]
+                "created_at",
+                "updated_at",
+                "testname",
+                "number",
+                "__class__"]
         self.assertCountEqual(dic.keys(), expected_attrs)
         self.assertEqual(dic['__class__'], 'BaseModel')
         self.assertEqual(dic['testname'], "Axist")
