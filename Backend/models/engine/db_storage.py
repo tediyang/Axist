@@ -12,40 +12,39 @@
       - update: update to data in the storage.
       - reload: setup the storage session.
       - close: remove the session.
+    First import neccessary modules.
 """
 
 from models.base_model import Base
-from models.geolocation import Location
 from models.user import User
 from os import getenv
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from  typing import Dict, Type, Optional, Any
 
-load_dotenv('axist.env')
-
-classes = {"User": User, "Location": Location}
+classes: Dict[str, type] = {"User": User, "Location": Location}
 
 
 class DBStorage:
-    """interaacts with the MySQL database"""
-    __engine = None
-    __session = None
+    """interacts with the MySQL database"""
+    __engine: Optional[Engine] = None
+    __session: Optional[Session] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Instantiate a DBStorage object"""
         user = getenv('AXIST_MYSQL_USER')
         pwd = getenv('AXIST_MYSQL_PWD')
         host = getenv('AXIST_MYSQL_HOST')
         db = getenv('AXIST_MYSQL_DB')
 
-        self.__engine = create_engine('mysql+mysqlconnector://{}:{}@{}/{}'.
-                                      format(user, pwd, host, db))
+        #  set engine privately
+        self.__engine = create_engine(f'mysql+mysqlconnector://{user}:{pwd}@{host}/{db}')
 
         if getenv('AXIST_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
-    def all(self, cls):
+    def all(self, cls: Type) -> dict:
         """
             query on the current database session and return all
             data based on the provided cls.
@@ -61,21 +60,21 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
-    def new(self, obj):
+    def new(self, obj) -> None:
         """add the object to the current database session"""
         self.__session.add(obj)
 
-    def save(self):
+    def save(self) -> None:
         """commit all changes of the current database session"""
         self.__session.commit()
 
-    def delete(self, obj=None):
+    def delete(self, obj: Optional[Object] = None) -> None:
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
             self.__session.commit()
 
-    def update(self, cls, id, dic):
+    def update(self, cls: type, id: str, dic: Dict[str, Any]) -> None:
         """
             update the user's data.
 
@@ -94,7 +93,7 @@ class DBStorage:
             obj.save()
             self.save()
 
-    def get(self, cls, id):
+    def get(self, cls: Type, id: str) -> Optional[Object]:
         """A method to retrieve one object"""
         if cls and id:
             data = self.all(cls)
@@ -104,13 +103,13 @@ class DBStorage:
 
         return None
 
-    def reload(self):
+    def reload(self) -> None:
         """reloads data from the database"""
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
         self.__session = Session
 
-    def close(self):
+    def close(self) -> None:
         """call remove() method on the private session attribute"""
         self.__session.remove()
