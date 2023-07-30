@@ -18,9 +18,9 @@
 """
 
 from datetime import datetime
-import models
-from sqlalchemy import Column, String, DateTime, Index
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
+from typing import Dict
 import uuid
 
 
@@ -38,21 +38,32 @@ class BaseModel:
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs) -> None:
         """ initialization of the id instance """
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.utcnow()
-        self.updated_at = self.created_at
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    value = datetime.strptime(value, time)
+                    setattr(self, key, value)
+                if key != "__class__":
+                    setattr(self, key, value)
+                if "id" not in self.__dict__:
+                    self.id = str(uuid.uuid4())
 
-    def __str__(self):
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.utcnow()
+            self.updated_at = self.created_at
+
+    def __str__(self) -> str:
         """ string representation of the Object class """
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
-    def save(self):
+    def save(self) -> None:
         """ updates the attribute 'updated_at' with the current datetime """
         self.updated_at = datetime.utcnow()
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, str]:
         """returns a dictionary containing all keys/values of the instance"""
         new_dict = self.__dict__.copy()
         new_dict["__class__"] = self.__class__.__name__
