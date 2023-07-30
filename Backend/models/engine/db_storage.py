@@ -25,7 +25,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from  typing import Dict, Type, Optional, Any
 
 
-# handle environmental files
+# handle environmental files. This part is not neccessary 
+#since we are already using getenv method. dont need to load path.
 path = find_dotenv("axist.env")
 load_dotenv(path)
 
