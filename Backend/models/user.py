@@ -6,26 +6,28 @@
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
-from hashlib import md5
+from sqlalchemy.orm import relationship
+from flask_bcrypt import generate_password_hash
 
 
 class User(BaseModel, Base):
     """ Representation of a user data. """
     __tablename__ = 'users'
-    username = Column(String(64), unique=True, nullable=False)
+    email = Column(String(64), unique=True, nullable=False)
     password = Column(String(64), nullable=False)
-    email = Column(String(64), nullable=False)
-    first_name = Column(String(64), nullable=True)
-    last_name = Column(String(64), nullable=True)
+    username = Column(String(64), unique=True)
+    first_name = Column(String(64))
+    last_name = Column(String(64))
+    locations = relationship("Location", backref="user", cascade="all delete-orphan")
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs) -> None:
         """initializes user"""
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: str) -> None:
         """sets a password with md5 encryption"""
         if name == "password":
-            value = md5(value.encode()).hexdigest()
+            value = generate_password_hash(value).decode('utf8')
         if name == 'username':
-            value = value.lower()
+            value = value.lower().strip()
         super().__setattr__(name, value)
