@@ -19,7 +19,7 @@ from models.base_model import Base
 from models.user import User
 from models.geolocation import Location
 from os import getenv
-from dotenv import load_dotenv, find_dotenv
+#from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from  typing import Dict, Type, Optional, Any
@@ -27,6 +27,7 @@ from  typing import Dict, Type, Optional, Any
 
 # handle environmental files. This part is not neccessary 
 #since we are already using getenv method. dont need to load path.
+#so we can remove the dotenv module
 path = find_dotenv("axist.env")
 load_dotenv(path)
 
@@ -40,15 +41,15 @@ class DBStorage:
 
     def __init__(self) -> None:
         """Instantiate a DBStorage object"""
-        user: str | None = getenv('AXIST_MYSQL_USER')
-        pwd : str | None = getenv('AXIST_MYSQL_PWD')
-        host: str | None = getenv('AXIST_MYSQL_HOST')
-        db: str | None = getenv('AXIST_MYSQL_DB')
+        user: str | None = os.getenv('AXIST_MYSQL_USER')
+        pwd : str | None = os.getenv('AXIST_MYSQL_PWD')
+        host: str | None = os.getenv('AXIST_MYSQL_HOST')
+        db: str | None = os.getenv('AXIST_MYSQL_DB')
 
         #  set engine privately
         self.__engine = create_engine(f'mysql+mysqlconnector://{user}:{pwd}@{host}/{db}')
 
-        if getenv('AXIST_ENV') == "test":
+        if os.getenv('AXIST_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls: Type[User] | Type[Location]) -> Dict:
