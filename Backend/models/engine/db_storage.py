@@ -17,26 +17,32 @@
 
 from models.base_model import Base
 from models.user import User
+from models.geolocation import Location
 from os import getenv
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from  typing import Dict, Type, Optional, Any
+
+
+# handle environmental files
+path = find_dotenv("axist.env")
+load_dotenv(path)
 
 classes: Dict[str, type] = {"User": User, "Location": Location}
 
 
 class DBStorage:
     """interacts with the MySQL database"""
-    __engine: Optional[Engine] = None
-    __session: Optional[Session] = None
+    __engine: Any = None
+    __session: Any = None
 
     def __init__(self) -> None:
         """Instantiate a DBStorage object"""
-        user = getenv('AXIST_MYSQL_USER')
-        pwd = getenv('AXIST_MYSQL_PWD')
-        host = getenv('AXIST_MYSQL_HOST')
-        db = getenv('AXIST_MYSQL_DB')
+        user: str | None = getenv('AXIST_MYSQL_USER')
+        pwd : str | None = getenv('AXIST_MYSQL_PWD')
+        host: str | None = getenv('AXIST_MYSQL_HOST')
+        db: str | None = getenv('AXIST_MYSQL_DB')
 
         #  set engine privately
         self.__engine = create_engine(f'mysql+mysqlconnector://{user}:{pwd}@{host}/{db}')
@@ -44,13 +50,13 @@ class DBStorage:
         if getenv('AXIST_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
-    def all(self, cls: Type) -> dict:
+    def all(self, cls: Type[User] | Type[Location]) -> Dict:
         """
             query on the current database session and return all
             data based on the provided cls.
         """
         # initialize the dict
-        new_dict = {}
+        new_dict: Dict[str, Type] = {}
         # iterate of the items in classes and check for conditions
         for clss in classes:
             if cls == classes[clss] or cls == clss:
@@ -60,7 +66,7 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
-    def new(self, obj) -> None:
+    def new(self, obj: Type[User] | Type[Location]) -> None:
         """add the object to the current database session"""
         self.__session.add(obj)
 
@@ -68,7 +74,7 @@ class DBStorage:
         """commit all changes of the current database session"""
         self.__session.commit()
 
-    def delete(self, obj: Optional[Object] = None) -> None:
+    def delete(self, obj: Optional[User] | Optional[Location] = None) -> None:
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
@@ -93,7 +99,7 @@ class DBStorage:
             obj.save()
             self.save()
 
-    def get(self, cls: Type, id: str) -> Optional[Object]:
+    def get(self, cls: Type, id: str) -> Optional[Any]:
         """A method to retrieve one object"""
         if cls and id:
             data = self.all(cls)
