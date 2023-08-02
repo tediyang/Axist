@@ -26,7 +26,7 @@ def login():
     ''' login defined '''
     data = request.get_json()
     if not data or 'username' not in data or 'password' not in data:
-        return jsonify({"message": "Invalid request. Please provide username and password."}, 400)
+        return jsonify({"message": "Unauthorized. Please provide username and password."}, 400)
 
     username = data['username']
     password = data['password']
@@ -36,7 +36,7 @@ def login():
         tokens[token] = username
         return jsonify({"access_token": token}, 200)
     else:
-        return jsonify({"message": "Invalid username or password."}, 401)
+        return jsonify({"message": "Invalid request: input valid username or password."}, 401)
 
 # Logout endpoint
 @app_users_auth.route('/logout', method=['POST'])
