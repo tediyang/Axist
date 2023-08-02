@@ -1,0 +1,43 @@
+/*
+==================
+Footer
+==================
+*/
+
+footer {
+    height: 50px;
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+    flex-shrink: 0;
+    position: absolute;
+    top: 170rem;
+}
+
+.logo-rights {
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+small[name="logo"] {
+    position: relative;
+    bottom: 20px;
+    left: 50px;
+}
+
+small[name="rights"] {
+    position: relative;
+    top: 34px;
+    left: 60px;
+}
+
+.socials ul {
+    padding-right: 110px;
+    display: flex;
+    padding-top: 15px;
+}
+
+.socials li{
+    display: inline-flex;
+    padding-left: 30px;
+}
